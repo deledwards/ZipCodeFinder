@@ -1,7 +1,9 @@
 package com.deledwards.zipcodefinder.service
 
 import com.deledwards.zipcodefinder.BuildConfig
+import com.deledwards.zipcodefinder.data.model.ZipCode
 import com.deledwards.zipcodefinder.data.model.ZipCodes
+import com.deledwards.zipcodefinder.domain.ZipCodeService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -28,4 +30,14 @@ interface ZipCodeAPI {
             return retrofit.create(ZipCodeAPI::class.java)
         }
     }
+}
+
+class ZipCodeServiceImpl : ZipCodeService {
+
+    override suspend fun getZipCodesWithRadius(zip: String, radiusInKm: Int): List<ZipCode> {
+
+        return listOf<ZipCode>()
+    }
+
+
 }
