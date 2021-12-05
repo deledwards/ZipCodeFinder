@@ -1,6 +1,7 @@
 package com.deledwards.zipcodefinder
 
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -10,6 +11,10 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import com.deledwards.zipcodefinder.databinding.ActivityMainBinding
+import com.deledwards.zipcodefinder.service.ZipCodeAPI
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,6 +36,17 @@ class MainActivity : AppCompatActivity() {
         binding.fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
+
+            val client = ZipCodeAPI.create()
+
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    val foo = client.getZipCodesWithRadius("30022",20)
+                    Log.e("TMP", foo.toString())
+                }catch (ex: Exception){
+                    ex.message?.let { Log.e("TMP", it) }
+                }
+            }
         }
     }
 

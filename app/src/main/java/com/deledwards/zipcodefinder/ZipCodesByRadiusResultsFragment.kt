@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.deledwards.zipcodefinder.app.ZipCodeViewModel
 import com.deledwards.zipcodefinder.databinding.FragmentZipcodesByRadiusResultsBinding
 
 /**
@@ -18,6 +20,8 @@ class ZipCodesByRadiusResultsFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    private val zipCodeSharedViewModel: ZipCodeViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
