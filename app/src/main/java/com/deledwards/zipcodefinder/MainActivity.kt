@@ -44,18 +44,7 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
 
-            zipCodeSharedViewModel.test("30022", 20)
-
-//            val client = ZipCodeAPI.create()
-//
-//            CoroutineScope(Dispatchers.IO).launch {
-//                try {
-//                    val foo = client.getZipCodesWithRadius("30022",20)
-//                    Log.e("TMP", foo.toString())
-//                }catch (ex: Exception){
-//                    ex.message?.let { Log.e("TMP", it) }
-//                }
-//            }
+            //zipCodeSharedViewModel.getZipCodesByRadius("30022", 20)
         }
     }
 

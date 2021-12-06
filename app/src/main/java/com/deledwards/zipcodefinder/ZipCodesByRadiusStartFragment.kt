@@ -37,6 +37,10 @@ class ZipCodesByRadiusStartFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonFirst.setOnClickListener {
+
+            val zip = binding.editTextZipCode.text.toString()
+            val distance = binding.editTextNumber.text.toString().toInt()
+            zipCodeSharedViewModel.getZipCodesByRadius(zip, distance)
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
     }
