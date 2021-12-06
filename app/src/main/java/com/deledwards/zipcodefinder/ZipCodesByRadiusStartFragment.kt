@@ -1,6 +1,8 @@
 package com.deledwards.zipcodefinder
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +11,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.deledwards.zipcodefinder.app.ZipCodeViewModel
 import com.deledwards.zipcodefinder.databinding.FragmentZipcodesByRadiusStartBinding
+import android.content.DialogInterface
+
+
+
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -26,7 +32,7 @@ class ZipCodesByRadiusStartFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         _binding = FragmentZipcodesByRadiusStartBinding.inflate(inflater, container, false)
         return binding.root
@@ -41,10 +47,32 @@ class ZipCodesByRadiusStartFragment : Fragment() {
             zipCodeSharedViewModel.getZipCodesByRadius(zip, distance)
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
+
+        zipCodeSharedViewModel.error.observe(viewLifecycleOwner, {
+            if(it == null) return@observe
+
+            Log.i(TAG, it.message.toString())
+            AlertDialog.Builder(context)
+                .setTitle("An error occurred")
+                .setMessage(it.message) // Specifying a listener allows you to take an action before dismissing the dialog.
+                // The dialog is automatically dismissed when a dialog button is clicked.
+                .setPositiveButton(android.R.string.ok
+                    ) { _, _ ->
+                        // Continue with delete operation
+                        zipCodeSharedViewModel.clearError()
+                    } // A null listener allows the button to dismiss the dialog and take no further action.
+                //.setNegativeButton(android.R.string.cancel, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show()
+        })
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        const val TAG = "ZipStartFrag"
     }
 }

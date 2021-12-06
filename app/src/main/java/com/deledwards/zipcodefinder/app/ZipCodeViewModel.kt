@@ -22,6 +22,9 @@ class ZipCodeViewModel @Inject constructor(private val service: ZipCodeService)
     private val _zipCodes = MutableLiveData<List<ZipCode>>()
     val zipCodes: LiveData<List<ZipCode>> = _zipCodes
 
+    private val _error = MutableLiveData<Throwable>()
+    val error: LiveData<Throwable> = _error
+
 
     fun getZipCodesByRadius(zip: String, radius: Int)  {
 
@@ -34,9 +37,14 @@ class ZipCodeViewModel @Inject constructor(private val service: ZipCodeService)
                 _zipCodes.value = foo
             }catch (ex: Exception){
                 Log.e("ViewModel", ex.message.toString())
+                _error.value = ex
             }finally {
                 _loading.value = false
             }
         }
+    }
+
+    fun clearError() {
+        _error.value = null
     }
 }

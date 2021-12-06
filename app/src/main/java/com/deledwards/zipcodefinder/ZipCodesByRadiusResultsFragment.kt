@@ -1,21 +1,18 @@
 package com.deledwards.zipcodefinder
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.deledwards.zipcodefinder.app.ZipCodeViewModel
-import com.deledwards.zipcodefinder.data.model.ZipCode
-import com.deledwards.zipcodefinder.databinding.FragmentItemBinding
-import com.deledwards.zipcodefinder.databinding.FragmentItemListBinding
-import com.deledwards.zipcodefinder.databinding.FragmentZipcodesByRadiusResultsBinding
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -68,5 +65,15 @@ class ZipCodesByRadiusResultsFragment : Fragment() {
                 }
             }
         })
+
+        zipCodeSharedViewModel.error.observe(viewLifecycleOwner, {
+            if(it == null) return@observe
+            Log.e(TAG, it.message.toString())
+            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
+        })
+    }
+
+    companion object {
+        const val TAG = "ZipResultsFrag"
     }
 }
