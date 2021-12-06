@@ -44,13 +44,10 @@ class ZipCodesByRadiusResultsFragment : Fragment() {
                     else -> GridLayoutManager(context, columnCount)
                 }
 
-
-                myadapter = ZipCodeRecyclerViewAdapter(listOf<ZipCode>())
-                adapter = myadapter //PlaceholderContent.ITEMS)
-
+                myadapter = ZipCodeRecyclerViewAdapter(listOf())
+                adapter = myadapter
             }
         }
-
         return view
     }
 
