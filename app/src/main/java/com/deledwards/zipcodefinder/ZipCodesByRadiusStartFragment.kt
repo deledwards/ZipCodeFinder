@@ -35,9 +35,7 @@ class ZipCodesByRadiusStartFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.buttonFirst.setOnClickListener {
-
             val zip = binding.editTextZipCode.text.toString()
             val distance = binding.editTextNumber.text.toString().toInt()
             zipCodeSharedViewModel.getZipCodesByRadius(zip, distance)

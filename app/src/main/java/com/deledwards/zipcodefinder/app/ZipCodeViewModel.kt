@@ -13,9 +13,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ZipCodeViewModel @Inject constructor(private val service: ZipCodeService)
-
     : ViewModel() {
 
+
+    private val _loading = MutableLiveData(false)
+    val loading: LiveData<Boolean> = _loading
 
     private val _zipCodes = MutableLiveData<List<ZipCode>>()
     val zipCodes: LiveData<List<ZipCode>> = _zipCodes
@@ -24,13 +26,17 @@ class ZipCodeViewModel @Inject constructor(private val service: ZipCodeService)
     fun getZipCodesByRadius(zip: String, radius: Int)  {
 
         viewModelScope.launch {
-            val foo = service.getZipCodesWithRadius(zip, radius)
-            _zipCodes.value = foo
+            try {
+                _loading.value = true
+                _zipCodes.value = listOf()
+
+                val foo = service.getZipCodesWithRadius(zip, radius)
+                _zipCodes.value = foo
+            }catch (ex: Exception){
+                Log.e("ViewModel", ex.message.toString())
+            }finally {
+                _loading.value = false
+            }
         }
-
-
     }
-
-
-
 }
