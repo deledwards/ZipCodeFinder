@@ -10,16 +10,23 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
+import androidx.fragment.app.activityViewModels
+import com.deledwards.zipcodefinder.app.ZipCodeViewModel
 import com.deledwards.zipcodefinder.databinding.ActivityMainBinding
 import com.deledwards.zipcodefinder.service.ZipCodeAPI
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+
+    private val zipCodeSharedViewModel: ZipCodeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,16 +44,18 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
 
-            val client = ZipCodeAPI.create()
+            zipCodeSharedViewModel.test("30022", 20)
 
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    val foo = client.getZipCodesWithRadius("30022",20)
-                    Log.e("TMP", foo.toString())
-                }catch (ex: Exception){
-                    ex.message?.let { Log.e("TMP", it) }
-                }
-            }
+//            val client = ZipCodeAPI.create()
+//
+//            CoroutineScope(Dispatchers.IO).launch {
+//                try {
+//                    val foo = client.getZipCodesWithRadius("30022",20)
+//                    Log.e("TMP", foo.toString())
+//                }catch (ex: Exception){
+//                    ex.message?.let { Log.e("TMP", it) }
+//                }
+//            }
         }
     }
 
