@@ -13,7 +13,18 @@
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            app:destination="@id/SecondFragment" >
+            <argument
+                android:name="zip"
+                app:argType="string"
+                 />
+            <argument
+                android:name="radius"
+                app:argType="integer"
+                />
+
+        </action>
+
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"

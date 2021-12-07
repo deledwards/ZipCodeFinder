@@ -29,12 +29,17 @@ class ZipCodesByRadiusStartFragment : Fragment() {
 
     private val zipCodeSharedViewModel: ZipCodeViewModel by activityViewModels()
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
 
         _binding = FragmentZipcodesByRadiusStartBinding.inflate(inflater, container, false)
+
+
+
+
         return binding.root
 
     }
@@ -42,29 +47,40 @@ class ZipCodesByRadiusStartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.buttonFirst.setOnClickListener {
-            val zip = binding.editTextZipCode.text.toString()
-            val distance = binding.editTextNumber.text.toString().toInt()
-            zipCodeSharedViewModel.getZipCodesByRadius(zip, distance)
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+            if(binding.editTextNumber.text.isNullOrBlank()) {
+                showAlert("Radius distance must be specified")
+            }else{
+                val zip = binding.editTextZipCode.text.toString()
+                val distance = binding.editTextNumber.text.toString().toInt()
+                val bundle = Bundle()
+                bundle.putString("zip", zip)
+                bundle.putInt("radius", distance)
+                findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment, bundle)
+            }
         }
 
-        zipCodeSharedViewModel.error.observe(viewLifecycleOwner, {
-            if(it == null) return@observe
+    }
 
-            Log.i(TAG, it.message.toString())
-            AlertDialog.Builder(context)
-                .setTitle("An error occurred")
-                .setMessage(it.message) // Specifying a listener allows you to take an action before dismissing the dialog.
-                // The dialog is automatically dismissed when a dialog button is clicked.
-                .setPositiveButton(android.R.string.ok
-                    ) { _, _ ->
-                        // Continue with delete operation
-                        zipCodeSharedViewModel.clearError()
-                    } // A null listener allows the button to dismiss the dialog and take no further action.
-                //.setNegativeButton(android.R.string.cancel, null)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show()
-        })
+
+    override fun onDestroy() {
+        super.onDestroy()
+        zipCodeSharedViewModel.error.removeObservers(viewLifecycleOwner)
+    }
+
+    private fun showAlert(message: String) {
+
+        AlertDialog.Builder(context)
+            .setTitle("An error occurred 1")
+            .setMessage(message) // Specifying a listener allows you to take an action before dismissing the dialog.
+            // The dialog is automatically dismissed when a dialog button is clicked.
+            .setPositiveButton(android.R.string.ok
+            ) { _, _ ->
+                // Continue with delete operation
+                zipCodeSharedViewModel.clearError()
+            } // A null listener allows the button to dismiss the dialog and take no further action.
+            //.setNegativeButton(android.R.string.cancel, null)
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .show()
     }
 
     override fun onDestroyView() {

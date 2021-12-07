@@ -1,5 +1,6 @@
 package com.deledwards.zipcodefinder
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -45,11 +46,14 @@ class ZipCodesByRadiusResultsFragment : Fragment() {
                 adapter = myadapter
             }
         }
+
+
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         zipCodeSharedViewModel.zipCodes.observe(viewLifecycleOwner, {
             myadapter.update(it)
@@ -68,9 +72,35 @@ class ZipCodesByRadiusResultsFragment : Fragment() {
 
         zipCodeSharedViewModel.error.observe(viewLifecycleOwner, {
             if(it == null) return@observe
-            Log.e(TAG, it.message.toString())
-            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
+
+            Log.i(ZipCodesByRadiusStartFragment.TAG, it.message.toString())
+            showAlert("${it.message}")
         })
+
+        val zip = arguments?.getString("zip")
+        val distance = arguments?.getInt("radius")
+        if (zip != null) {
+            if (distance != null) {
+                zipCodeSharedViewModel.getZipCodesByRadius(zip, distance)
+            }
+        }
+    }
+
+    private fun showAlert(message: String) {
+
+        AlertDialog.Builder(context)
+            .setTitle("An error occurred")
+            .setMessage(message) // Specifying a listener allows you to take an action before dismissing the dialog.
+            // The dialog is automatically dismissed when a dialog button is clicked.
+            .setPositiveButton(android.R.string.ok
+            ) { _, _ ->
+                // Continue with delete operation
+                findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
+                zipCodeSharedViewModel.clearError()
+            } // A null listener allows the button to dismiss the dialog and take no further action.
+            //.setNegativeButton(android.R.string.cancel, null)
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .show()
     }
 
     companion object {

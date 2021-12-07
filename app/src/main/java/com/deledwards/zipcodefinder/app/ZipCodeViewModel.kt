@@ -10,11 +10,14 @@ import com.deledwards.zipcodefinder.domain.ZipCodeService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import android.R
+import android.content.res.Resources
+import java.io.InputStream
+
 
 @HiltViewModel
 class ZipCodeViewModel @Inject constructor(private val service: ZipCodeService)
     : ViewModel() {
-
 
     private val _loading = MutableLiveData(false)
     val loading: LiveData<Boolean> = _loading
@@ -24,7 +27,6 @@ class ZipCodeViewModel @Inject constructor(private val service: ZipCodeService)
 
     private val _error = MutableLiveData<Throwable>()
     val error: LiveData<Throwable> = _error
-
 
     fun getZipCodesByRadius(zip: String, radius: Int)  {
 
@@ -47,4 +49,6 @@ class ZipCodeViewModel @Inject constructor(private val service: ZipCodeService)
     fun clearError() {
         _error.value = null
     }
+
+
 }
