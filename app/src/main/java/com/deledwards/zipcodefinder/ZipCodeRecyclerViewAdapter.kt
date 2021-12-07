@@ -4,10 +4,8 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
-import com.deledwards.zipcodefinder.data.model.ZipCode
-
-import com.deledwards.zipcodefinder.placeholder.PlaceholderContent.PlaceholderItem
 import com.deledwards.zipcodefinder.databinding.FragmentItemBinding
+import com.deledwards.zipcodefinder.domain.model.ZipCode
 
 /**
  * [RecyclerView.Adapter] that can display a [PlaceholderItem].
@@ -31,18 +29,22 @@ class ZipCodeRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
-        holder.idView.text = item.code
-        holder.contentView.text = item.city
+        holder.code.text = item.code
+        holder.city.text = item.city
+        holder.state.text = item.state.name
+        holder.distance.text = item.distance.toString()
     }
 
     override fun getItemCount(): Int = values.size
 
     inner class ViewHolder(binding: FragmentItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        val idView: TextView = binding.itemNumber
-        val contentView: TextView = binding.content
+        val code: TextView = binding.code
+        val city: TextView = binding.city
+        val state: TextView = binding.state
+        val distance: TextView = binding.distance
 
         override fun toString(): String {
-            return super.toString() + " '" + contentView.text + "'"
+            return super.toString() + " '" + city.text + "'"
         }
     }
 

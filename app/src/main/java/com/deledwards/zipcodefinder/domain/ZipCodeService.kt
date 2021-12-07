@@ -1,6 +1,6 @@
 package com.deledwards.zipcodefinder.domain
 
-import com.deledwards.zipcodefinder.data.model.ZipCode
+import com.deledwards.zipcodefinder.domain.model.ZipCode
 
 interface ZipCodeService {
 

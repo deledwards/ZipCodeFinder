@@ -5,14 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.deledwards.zipcodefinder.data.model.ZipCode
 import com.deledwards.zipcodefinder.domain.ZipCodeService
+import com.deledwards.zipcodefinder.domain.model.ZipCode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import android.R
-import android.content.res.Resources
-import java.io.InputStream
 
 
 @HiltViewModel
@@ -35,8 +32,13 @@ class ZipCodeViewModel @Inject constructor(private val service: ZipCodeService)
                 _loading.value = true
                 _zipCodes.value = listOf()
 
-                val foo = service.getZipCodesWithRadius(zip, radius)
-                _zipCodes.value = foo
+                val zipCodeList = service.getZipCodesWithRadius(zip, radius)
+                if(zipCodeList.isEmpty()){
+                    _zipCodes.value = zipCodeList
+                    _error.value = Throwable("No nearby zipcodes found. Try increasing your radius.")
+                }else{
+                    _zipCodes.value = zipCodeList
+                }
             }catch (ex: Exception){
                 Log.e("ViewModel", ex.message.toString())
                 _error.value = ex
