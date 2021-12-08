@@ -2,7 +2,7 @@ package com.deledwards.zipcodefinder.domain.model;
 
 import java.util.HashMap;
 import java.util.Map;
-
+//adapted from https://stackoverflow.com/a/42232714/5216684
 public enum State {
 
     ALABAMA("Alabama", "AL"), ALASKA("Alaska", "AK"), AMERICAN_SAMOA("American Samoa", "AS"), ARIZONA("Arizona", "AZ"), ARKANSAS(

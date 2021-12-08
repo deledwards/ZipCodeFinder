@@ -1,5 +1,6 @@
 package com.deledwards.zipcodefinder.service
 
+import arrow.core.Either
 import com.deledwards.zipcodefinder.data.model.ZipCode as ApiZipCode
 import com.deledwards.zipcodefinder.domain.ZipCodeService
 import com.deledwards.zipcodefinder.domain.ZipCodeValidationService
@@ -12,22 +13,59 @@ class ZipCodeServiceImpl @Inject constructor(
     private val validationService: ZipCodeValidationService
 ) : ZipCodeService {
 
-    override suspend fun getZipCodesWithRadius(zip: String, radiusInKm: Int): List<ZipCode> {
+//    override suspend fun getZipCodesWithRadius(zip: String, radiusInKm: Int): List<ZipCode> {
+//
+//        if(!validationService.checkZipCodeIsValidUSZipCode(zip))
+//            throw ZipCodeNotFoundException("Zip code '$zip' not found.")
+//
+//        val apiRet = api.getZipCodesWithRadius(zip, radiusInKm)
+//
+//        if(apiRet.zipCodes.isEmpty()) return listOf()
+//
+//        val mutableZips = mutableListOf<ApiZipCode>()
+//        mutableZips.addAll(apiRet.zipCodes)
+//        val zipsWithRadius = mutableZips.filter{ it.code != zip }
+//
+//        //adapt deserialized zipcodes to domain representations
+//        return adaptZipCodes(zipsWithRadius)
+//
+//    }
 
-        if(!validationService.checkZipCodeIsValid(zip))
-            throw ZipCodeNotFoundException("Zip code '$zip' not found.")
+    override suspend fun getZipCodesWithRadius2(
+        zip: String,
+        radiusInKm: Int
+    ): Either<Throwable, List<ZipCode>> {
+        try {
+            if(zip.length != 5){
+                return Either.Left(ZipCodeInvalidLengthException("Expected zip code of length 5, instead of ${zip.length}"))
+            }
 
-        val apiRet = api.getZipCodesWithRadius(zip, radiusInKm)
+            val reg = Regex("[0-9]+")
+            if(!reg.matches(zip)){
+                return Either.Left(ZipCodeInvalidCharactersException("Zip code must contain only numeric characters"))
+            }
 
-        if(apiRet.zipCodes.isEmpty()) return listOf()
+            if (!validationService.checkZipCodeIsValidUSZipCode(zip)) {
+                return Either.Left(ZipCodeNotFoundException("Zip code '$zip' not found."))
+            }
 
-        val mutableZips = mutableListOf<ApiZipCode>()
-        mutableZips.addAll(apiRet.zipCodes)
-        val zipsWithRadius = mutableZips.filter{ it.code != zip }
+            val apiRet = api.getZipCodesWithRadius(zip, radiusInKm)
 
-        //adapt deserialized zipcodes to domain representations
-        return adaptZipCodes(zipsWithRadius)
+            if (apiRet.zipCodes.isEmpty()) return Either.Left(
+                NoResultsWithinRadiusException("No results found within $radiusInKm km of '$zip' ")
+            )
 
+            val mutableZips = mutableListOf<ApiZipCode>()
+            mutableZips.addAll(apiRet.zipCodes)
+            val zipsWithRadius = mutableZips.filter { it.code != zip }
+
+            //adapt deserialized zipcodes to domain representations
+            val ret = adaptZipCodes(zipsWithRadius)
+
+            return Either.Right(ret)
+        }catch (ex: Exception){
+            return Either.Left(ex)
+        }
     }
 
     private fun adaptZipCodes(zipCodes: List<ApiZipCode>): List<ZipCode> {
@@ -49,5 +87,10 @@ class ZipCodeServiceImpl @Inject constructor(
 
 class ZipCodeNotFoundException(message: String) : Exception(message)
 
-class RadiusDistanceNotSpecifiedException(message: String) : Exception(message)
+class ZipCodeInvalidLengthException(message: String) : Exception(message)
+
+class ZipCodeInvalidCharactersException(message: String) : Exception(message)
+
+class NoResultsWithinRadiusException(message: String) : Exception(message)
+
 

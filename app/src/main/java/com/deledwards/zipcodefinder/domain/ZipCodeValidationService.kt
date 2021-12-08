@@ -2,5 +2,5 @@ package com.deledwards.zipcodefinder.domain
 
 interface ZipCodeValidationService{
 
-    suspend fun checkZipCodeIsValid(zip: String): Boolean
+    suspend fun checkZipCodeIsValidUSZipCode(zip: String): Boolean
 }

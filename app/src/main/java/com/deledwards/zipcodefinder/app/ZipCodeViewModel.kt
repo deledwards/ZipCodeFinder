@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import arrow.core.Either
 import com.deledwards.zipcodefinder.domain.ZipCodeService
 import com.deledwards.zipcodefinder.domain.model.ZipCode
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,24 +26,27 @@ class ZipCodeViewModel @Inject constructor(private val service: ZipCodeService)
     private val _error = MutableLiveData<Throwable>()
     val error: LiveData<Throwable> = _error
 
-    fun getZipCodesByRadius(zip: String, radius: Int)  {
+    fun getZipCodesByRadius(zip: String, radius: Int) {
 
         viewModelScope.launch {
             try {
                 _loading.value = true
                 _zipCodes.value = listOf()
 
-                val zipCodeList = service.getZipCodesWithRadius(zip, radius)
-                if(zipCodeList.isEmpty()){
-                    _zipCodes.value = zipCodeList
-                    _error.value = Throwable("No nearby zipcodes found. Try increasing your radius.")
-                }else{
-                    _zipCodes.value = zipCodeList
+                val zipRet = service.getZipCodesWithRadius2(zip, radius)
+                val ret = when (zipRet) {
+                    is Either.Left ->  {
+                        _zipCodes.value = listOf()
+                        _error.value = zipRet.value
+                    }
+                    is Either.Right -> {
+                        _zipCodes.value  = zipRet.value
+                    }
                 }
-            }catch (ex: Exception){
+            } catch (ex: Exception) {
                 Log.e("ViewModel", ex.message.toString())
                 _error.value = ex
-            }finally {
+            } finally {
                 _loading.value = false
             }
         }
