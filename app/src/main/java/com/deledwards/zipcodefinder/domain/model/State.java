@@ -1,5 +1,7 @@
 package com.deledwards.zipcodefinder.domain.model;
 
+import androidx.annotation.NonNull;
+
 import java.util.HashMap;
 import java.util.Map;
 //adapted from https://stackoverflow.com/a/42232714/5216684
@@ -25,17 +27,17 @@ public enum State {
     /**
      * The state's name.
      */
-    private String name;
+    private final String name;
 
     /**
      * The state's abbreviation.
      */
-    private String abbreviation;
+    private final String abbreviation;
 
     /**
      * The set of states addressed by abbreviations.
      */
-    private static final Map<String, State> STATES_BY_ABBR = new HashMap<String, State>();
+    private static final Map<String, State> STATES_BY_ABBR = new HashMap<>();
 
     /* static initializer */
     static {
@@ -80,15 +82,7 @@ public enum State {
         }
     }
 
-    public static State valueOfName(final String name) {
-        final String enumName = name.toUpperCase().replaceAll(" ", "_");
-        try {
-            return valueOf(enumName);
-        } catch (final IllegalArgumentException e) {
-            return State.UNKNOWN;
-        }
-    }
-
+    @NonNull
     @Override
     public String toString() {
         return name;

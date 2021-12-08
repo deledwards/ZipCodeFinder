@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -14,26 +13,30 @@
         android:id="@+id/textViewZipCode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Zip Code" />
+        android:text="@string/zip_code_label" />
 
     <EditText
         android:id="@+id/editTextZipCode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="text" />
+        android:inputType="text"
+        android:hint="@string/hint_5_digit_zip_code"
+        android:autofillHints="Zip code" />
 
     <TextView
         android:id="@+id/textViewDistance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Distance" />
+        android:text="@string/distance_label" />
 
     <EditText
         android:id="@+id/editTextNumber"
+        android:autofillHints="Zip code radius"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="@string/hint_distance_in_km"
         android:inputType="number" />
 
     <Button
@@ -41,5 +44,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/next" />
+        android:text="@string/find_nearby_zip_codes" />
 </LinearLayout>

@@ -33,8 +33,7 @@ class ZipCodeViewModel @Inject constructor(private val service: ZipCodeService)
                 _loading.value = true
                 _zipCodes.value = listOf()
 
-                val zipRet = service.getZipCodesWithRadius2(zip, radius)
-                val ret = when (zipRet) {
+                when (val zipRet = service.getZipCodesWithRadius2(zip, radius)) {
                     is Either.Left ->  {
                         _zipCodes.value = listOf()
                         _error.value = zipRet.value
@@ -44,7 +43,7 @@ class ZipCodeViewModel @Inject constructor(private val service: ZipCodeService)
                     }
                 }
             } catch (ex: Exception) {
-                Log.e("ViewModel", ex.message.toString())
+                Log.e(TAG, ex.message.toString())
                 _error.value = ex
             } finally {
                 _loading.value = false
@@ -56,5 +55,8 @@ class ZipCodeViewModel @Inject constructor(private val service: ZipCodeService)
         _error.value = null
     }
 
+    companion object {
+        const val TAG = "ZipCodeVModel"
+    }
 
 }

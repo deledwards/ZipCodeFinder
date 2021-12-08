@@ -1,5 +1,6 @@
 package com.deledwards.zipcodefinder
 
+import android.annotation.SuppressLint
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,8 +9,7 @@ import com.deledwards.zipcodefinder.databinding.FragmentItemBinding
 import com.deledwards.zipcodefinder.domain.model.ZipCode
 
 /**
- * [RecyclerView.Adapter] that can display a [PlaceholderItem].
- * TODO: Replace the implementation with code for your data type.
+ * [ZipCodeRecyclerViewAdapter] that can display a [ZipCode].
  */
 class ZipCodeRecyclerViewAdapter(
     private var values: List<ZipCode>
@@ -48,6 +48,7 @@ class ZipCodeRecyclerViewAdapter(
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun update(zipCodes: List<ZipCode>){
         values = zipCodes
         this.notifyDataSetChanged()
