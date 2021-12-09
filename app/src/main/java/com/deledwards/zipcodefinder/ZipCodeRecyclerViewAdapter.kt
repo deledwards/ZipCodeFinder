@@ -27,12 +27,13 @@ class ZipCodeRecyclerViewAdapter(
 
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
-        holder.code.text = item.code
-        holder.city.text = item.city
-        holder.state.text = item.state.name
-        holder.distance.text = item.distance.toString()
+
+        holder.code.text =  "Zip: ${item.code}"
+        holder.city.text = "${item.city}, ${item.state}"
+        holder.distance.text = "${item.distance.toString()} km distance"
     }
 
     override fun getItemCount(): Int = values.size
@@ -40,7 +41,6 @@ class ZipCodeRecyclerViewAdapter(
     inner class ViewHolder(binding: FragmentItemBinding) : RecyclerView.ViewHolder(binding.root) {
         val code: TextView = binding.code
         val city: TextView = binding.city
-        val state: TextView = binding.state
         val distance: TextView = binding.distance
 
         override fun toString(): String {
