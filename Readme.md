@@ -4,11 +4,11 @@
 
 ### Project overview
 
-> Simple two screen app that fetches nearby zip codes. The first screen accepts a zip code and a distance in km, the second screen shows all nearby zipcodes within the radius (specified distance) of the specified zip code, in a scrollable list.
+> Simple two screen app that fetches nearby zip codes from a remote API . The first screen accepts a zip code and a distance in km, the second screen shows all nearby zipcodes within the radius (specified distance) of the specified zip code, in a scrollable list.
 
 ### Architectual patterns
 
-> Standard Google Jetpack MVVM app using: Jetpack View Models, LiveData for binding values to UIs and updating UI state, Android Fragment-based navigation between screens, and Kotlin coroutines for performing asyncronous actions.
+> Standard Google Jetpack MVVM app using: Jetpack View Models, LiveData for binding values to UIs and updating UI state, Android Fragment-based navigation between screens, and Kotlin coroutines for performing asynchronous actions.
 
 ### Notable Technologies used
 
